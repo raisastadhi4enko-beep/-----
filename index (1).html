@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Твій медіа-вектор: яку спеціальність обрати?</title>
+<meta name="description" content="Пройди тест із 11 питань і дізнайся, яка освітня програма з медіа підходить саме тобі.">
+<style>
+/* ==========================================================
+   ШРИФТИ
+   Поклади файли шрифтів у папку /fonts поруч з index.html:
+   fonts/ZvinMedium.woff2 та fonts/Univermag.woff2
+   (за потреби змінюй назви файлів нижче).
+   ========================================================== */
+@font-face{font-family:"Zvin";font-weight:500;font-display:swap;
+  src:local("Zvin Medium"),local("Zvin-Medium"),url("fonts/ZvinMedium.woff2") format("woff2"),url("fonts/ZvinMedium.woff") format("woff")}
+@font-face{font-family:"Univermag";font-weight:400;font-display:swap;
+  src:local("Univermag"),url("fonts/Univermag.woff2") format("woff2"),url("fonts/Univermag.woff") format("woff")}
+
+/* ==========================================================
+   ДИЗАЙН-ТОКЕНИ — змінюй кольори та шрифти тут
+   ========================================================== */
+:root{
+  --teal:#116062;        /* основний */
+  --teal-deep:#0A3E40;   /* темніший для панелей */
+  --teal-mid:#2E8587;    /* hover, акценти */
+  --teal-soft:#CFE6E5;   /* рамки, смужки */
+  --teal-tint:#EAF4F3;   /* фон блоків */
+  --white:#FFFFFF;
+  --ink:#0E2A2B;         /* текст */
+  --muted:#4F6E6F;       /* другорядний текст */
+  --sand:#F3C969;        /* рідкісний теплий акцент */
+  --font-main:"Zvin","Segoe UI",system-ui,sans-serif;
+  --font-second:"Univermag","Georgia",serif;
+  --radius:18px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:var(--font-main);font-weight:500;color:var(--ink);background:var(--white);
+  line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--sand);outline-offset:3px}
+[hidden]{display:none!important}
+
+/* ---------- Каркас: ліва панель + права робоча зона ---------- */
+.app{min-height:100%;display:grid;grid-template-columns:minmax(300px,38%) 1fr}
+.side{background:var(--teal);color:var(--white);padding:clamp(24px,4vw,56px);
+  display:flex;flex-direction:column;justify-content:space-between;gap:32px;
+  position:sticky;top:0;height:100vh;overflow:hidden}
+.side::after{content:"";position:absolute;right:-90px;bottom:-90px;width:300px;height:300px;
+  border-radius:50%;border:44px solid rgba(255,255,255,.07);pointer-events:none}
+.brand{font-family:var(--font-second);font-size:1rem;opacity:.85}
+.side h1{font-family:var(--font-second);font-weight:400;font-size:clamp(2rem,3.6vw,3.4rem);
+  line-height:1.05;letter-spacing:-.01em;max-width:11ch}
+.side p{max-width:34ch;opacity:.88}
+.progress{display:flex;flex-direction:column;gap:10px}
+.progress-label{display:flex;justify-content:space-between;font-size:.95rem}
+.bar{height:6px;border-radius:6px;background:rgba(255,255,255,.2);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--sand);border-radius:6px;transition:width .5s var(--ease)}
+
+.main{padding:clamp(24px,5vw,72px);display:flex;align-items:center;justify-content:center}
+.panel{width:100%;max-width:680px}
+
+/* ---------- Кнопки ---------- */
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:999px;
+  padding:16px 30px;background:var(--teal);color:var(--white);font-size:1.05rem;
+  transition:background .2s,transform .2s var(--ease)}
+.btn:hover{background:var(--teal-mid)}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:transparent;color:var(--teal);box-shadow:inset 0 0 0 2px var(--teal-soft)}
+.btn.ghost:hover{background:var(--teal-tint)}
+.link{background:none;border:0;color:var(--muted);padding:8px 0;text-decoration:underline;text-underline-offset:4px}
+.link:hover{color:var(--teal)}
+
+/* ---------- Старт ---------- */
+.start h2{font-family:var(--font-second);font-weight:400;font-size:clamp(1.8rem,3vw,2.5rem);line-height:1.15;margin-bottom:16px}
+.start p{color:var(--muted);margin-bottom:12px;max-width:52ch}
+.start .meta{margin:24px 0 32px;color:var(--teal)}
+
+/* ---------- Питання ---------- */
+.q-count{color:var(--teal-mid);margin-bottom:12px}
+.q-title{font-family:var(--font-second);font-weight:400;font-size:clamp(1.5rem,2.6vw,2.15rem);
+  line-height:1.2;margin-bottom:28px;max-width:30ch}
+.options{list-style:none;padding:0;display:grid;gap:12px}
+.opt{width:100%;display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;text-align:left;
+  background:var(--white);border:2px solid var(--teal-soft);border-radius:var(--radius);padding:16px 18px;
+  transition:border-color .2s,background .2s,transform .2s var(--ease)}
+.opt:hover{border-color:var(--teal);background:var(--teal-tint)}
+.opt .key{width:44px;height:44px;border-radius:12px;background:var(--teal-tint);color:var(--teal);
+  display:grid;place-items:center;font-family:var(--font-second);font-size:1.25rem;transition:.2s}
+.opt:hover .key{background:var(--teal);color:var(--white)}
+.opt.picked{border-color:var(--teal);background:var(--teal)}
+.opt.picked .key{background:var(--sand);color:var(--ink)}
+.opt.picked .txt{color:var(--white)}
+.opt .txt{padding-top:9px}
+.q-nav{margin-top:24px;display:flex;justify-content:space-between;align-items:center}
+.swap{animation:swap .45s var(--ease)}
+@keyframes swap{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+
+/* ---------- Результат ---------- */
+.result .lead{color:var(--teal-mid);margin-bottom:8px}
+.result h2{font-family:var(--font-second);font-weight:400;font-size:clamp(2rem,4vw,3.2rem);line-height:1.1;margin-bottom:20px}
+.card{background:var(--teal-tint);border-radius:var(--radius);padding:24px 26px;margin-bottom:16px}
+.card h3{font-family:var(--font-second);font-weight:400;font-size:1.25rem;color:var(--teal);margin-bottom:6px}
+.card.main-card{background:var(--teal);color:var(--white)}
+.card.main-card h3{color:var(--sand)}
+.card .prog{font-family:var(--font-second);font-size:1.5rem;margin-bottom:12px}
+.scores{margin:28px 0;display:grid;gap:12px}
+.scores h3{font-family:var(--font-second);font-weight:400;font-size:1.1rem}
+.score{display:grid;grid-template-columns:minmax(120px,38%) 1fr 28px;gap:12px;align-items:center;font-size:.95rem}
+.score .track{height:10px;border-radius:10px;background:var(--teal-soft);overflow:hidden}
+.score .track i{display:block;height:100%;background:var(--teal);border-radius:10px;width:0;transition:width .9s var(--ease)}
+.score.win .track i{background:var(--sand)}
+.score b{font-weight:500;text-align:right}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+
+/* ---------- Мобільна версія ---------- */
+@media(max-width:860px){
+  .app{grid-template-columns:1fr}
+  .side{position:relative;height:auto;padding:20px 20px 24px;gap:18px}
+  .side h1{font-size:1.8rem;max-width:none}
+  .side p,.side::after{display:none}
+  .main{padding:28px 20px 48px;align-items:flex-start}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">Освітні програми · Медіа</div>
+    <div>
+      <h1>Твій медіа-вектор</h1>
+      <p>Яку спеціальність обрати? Відповідай чесно: правильних і неправильних відповідей тут немає.</p>
+    </div>
+    <div class="progress" id="progress" aria-live="polite">
+      <div class="progress-label"><span id="progressText">Готовий почати?</span><span id="progressPct"></span></div>
+      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="barWrap"><i id="barFill"></i></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <section class="panel" id="panel"></section>
+  </main>
+</div>
+
+<script>
+/* ==========================================================
+   ДАНІ ТЕСТУ — редагуй тексти тут
+   Літера відповіді → тег програми (1 бал за кожну відповідь)
+   ========================================================== */
+const TAGS = { "А":"PR", "Б":"Journalism", "В":"Production", "Г":"Int_Journalism", "Д":"Publishing" };
+const LETTERS = ["А","Б","В","Г","Д"];
+
+/* Порядок у цьому масиві = пріоритет при нічиїй */
+const RESULTS = {
+  PR: {
+    name:"Реклама та зв’язки з громадськістю (PR)",
+    profile:"Ти — майстер комунікацій та впливу. Ти знаєш, як закохати аудиторію в бренд, створити імідж та керувати думкою громадськості.",
+    awaits:"Копірайтинг, SMM, бренд-менеджмент, антикризовий PR, розробка рекламних стратегій, робота з лідерами думок та креативними агенціями."
+  },
+  Journalism: {
+    name:"Журналістика",
+    profile:"Ти — природжений шукач правди, аналітик та оповідач. Тобі цікаво бути в центрі подій, першим дізнаватися новини та доносити їх до суспільства.",
+    awaits:"Оперативна журналістика, проведення розслідувань, створення репортажів, робота в кадрі та у радіоефірі, фактчекінг і робота з джерелами."
+  },
+  Production: {
+    name:"Медіапродюсування",
+    profile:"Ти — стратег, креатор і організатор. Ти бачиш медіа як бізнес та мистецтво одночасно і знаєш, як перетворити ідею на видовищний та прибутковий проєкт.",
+    awaits:"Створення TV- та YouTube-шоу, монетизація контенту, управління медіапроєктами, робота з блогерами, знімальний процес від концепту до дистрибуції."
+  },
+  Int_Journalism: {
+    name:"Міжнародна журналістика",
+    profile:"Твій горизонт — це увесь світ. Ти цікавишся геополітикою, вільно орієнтуєшся у глобальному контексті та прагнеш працювати на міжнародному рівні.",
+    awaits:"Поглиблене вивчення іноземних мов, аналіз міжнародних відносин, дипломатичний протокол, робота закордонним кореспондентом та аналітиком у світових медіа."
+  },
+  Publishing: {
+    name:"Видавнича справа та редагування",
+    profile:"Ти — естетист, перфекціоніст та архітектор контенту. Ти цінуєш якісний текст, візуальну гармонію та досконалість форми.",
+    awaits:"Книжковий та цифровий дизайн, верстка (InDesign, Figma), текстове редагування, керування видавничими проєктами, контент-маркетинг та підготовка медіапродукції."
+  }
+};
+
+/* Кожне питання: q — текст, a — п’ять відповідей у порядку А, Б, В, Г, Д */
+const QUESTIONS = [
+  { q:"Який тип контенту тобі найцікавіше створювати або споживати?", a:[
+    "Яскраві рекламні слогани, креативні кампанії брендів, стратегії просування в соцмережах.",
+    "Статті-розслідування, репортажі з місця подій, інтерв’ю з цікавими людьми.",
+    "Відеокліпи, трендові ролики, подкасти, шоу, інтерактивні медіапроєкти.",
+    "Аналітика світової політики, новини міжнародних відносин, репортажі іноземними мовами.",
+    "Гарно зверстані книги, електронні видання, лонгріди, естетичні журнали."]},
+  { q:"Якби тобі запропонували шкільний проєкт, яку роль ти б обрав(ла)?", a:[
+    "Маркетолог/PR-менеджер: вигадати, як презентувати проєкт, щоб про нього дізналася та заговорила вся школа.",
+    "Оперативний кореспондент: знайти першоджерела, взяти коментарі та швидко описати суть.",
+    "Продюсер/Режисер: зібрати команду, розподілити бюджет, придумати концепцію та запустити проєкт.",
+    "Міжнародний оглядач: дослідити, як подібні проблеми вирішують за кордоном, та підготувати матеріал двома мовами.",
+    "Редактор/Дизайнер: перевірити текст на помилки, відліфувати стиль та красиво оформити фінальний макет."]},
+  { q:"Яка з цих навичок є твоєю найсильнішою стороною?", a:[
+    "Переконливість, креативність, розуміння психології аудиторії.",
+    "Критичне мислення, вміння ставити влучні запитання та викривати факти.",
+    "Організаторські здібності, відчуття трендів, вміння монетизувати ідеї.",
+    "Грамотне володіння іноземними мовами, крос-культурна комунікація.",
+    "Уважність до деталей, відчуття естетики, любов до тексту та друкованого чи електронного слова."]},
+  { q:"У якому середовищі ти бачиш свою майбутню роботу?", a:[
+    "У креативній PR-агенції, відділі маркетингу великої компанії або SMM-студії.",
+    "У гарячій точці подій, редакторській групі новинного порталу або на телебаченні.",
+    "На знімальному майданчику, у продакшн-студії або керуючи власним YouTube/TikTok-проєктом.",
+    "У корпункті за кордоном, міжнародній медіаагенції, пресслужбі міжнародної організації.",
+    "У сучасному видавництві, контент-бюро, цифровому медіа або дизайн-студії."]},
+  { q:"Що тебе найбільше мотивує в медіагалузі?", a:[
+    "Будувати репутацію брендів, закохувати людей у продукти та керувати комунікаціями.",
+    "Шукати правду, інформувати суспільство та впливати на важливі соціальні рішення.",
+    "Створювати масштабні медіапроєкти від ідеї до прибутку.",
+    "Бути містком між Україною та світом, висвітлювати глобальні події.",
+    "Створювати якісний, довершений інтелектуальний та візуальний продукт (книги, журнали, лонгріди)."]},
+  { q:"Який предмет у школі або позашкільна діяльність тобі подобається найбільше?", a:[
+    "Психологія, малювання/дизайн, ведення пабліків, створення фото/відеоконтенту для брендів.",
+    "Українська мова, історія, участь у шкільній газеті чи дебатах.",
+    "Шкільне самоврядування, організація заходів, ведення особистого блогу.",
+    "Іноземні мови, всесвітня історія, географія, участь у моделюванні ООН.",
+    "Література, верстка, графічний дизайн, коригування текстів."]},
+  { q:"Як ти реагуєш на інформаційні тренди та фейки?", a:[
+    "Аналізую, як цей тренд використати для просування бренду чи компанії (ситуативний маркетинг).",
+    "Одразу починаю перевіряти першоджерела та шукати спростування (фактчекінг).",
+    "Думаю, як на цьому тренді можна зняти вірусне відео або запустити новий проєкт.",
+    "Порівнюю, як цю новину висвітлюють українські та провідні світові ЗМІ (BBC, CNN, Reuters).",
+    "Звертаю увагу на те, як структурована інформація, який стиль використано та як вона оформлена."]},
+  { q:"Який інструмент або програму ти хочеш опанувати на професійному рівні?", a:[
+    "Рекламні кабінети (Meta Ads, Google Ads), таргетинг, бренд-стратегії та CRM-системи.",
+    "Програми для запису інтерв’ю, текстові редактори та бази даних для розслідувань.",
+    "Софт для монтажу відео (Premiere Pro/Final Cut), продюсерські таск-трекери та аналітику медіаринку.",
+    "Інструменти моніторингу світових ЗМІ, синхронний та письмовий переклад.",
+    "Графічні пакети для верстки та дизайну (InDesign, Photoshop, Illustrator, Figma)."]},
+  { q:"Уяви свій ідеальний результат після закінчення університету:", a:[
+    "Вірусна рекламна кампанія, про яку говорять усі, та впізнаваний бренд.",
+    "Серія публікацій або матеріалів, які змінили суспільство на краще.",
+    "Успішний медіастартап, YouTube-канал-мільйонник або власна продакшн-студія.",
+    "Репортаж із міжнародного саміту або робота власкором за кордоном.",
+    "Видана книга, стильний журнал або успішний мультимедійний контент-проєкт."]},
+  { q:"Який робочий виклик здається тобі найцікавішим?", a:[
+    "Погасити репутаційну кризу бренду та повернути довіру клієнтів.",
+    "Встигнути першим передати гарячу новину з місця подій.",
+    "Знайти фінансування та зібрати команду під складний відеопроєкт.",
+    "Взяти інтерв’ю у дипломата чи іноземного експерта англійською мовою.",
+    "Довести до ідеалу складний макет видання перед відправкою до друку чи публікацією."]},
+  { q:"Уяви, що ти опинився(лася) на безлюдному острові з групою людей. Яка твоя суперсила знадобиться спільноті?", a:[
+    "Налагоджувати стосунки між людьми, уникати конфліктів і переконати сусіднє плем’я поділитися ресурсами.",
+    "Задавати правильні питання, дізнатися всі секрети острова і вести щоденник наших пригод.",
+    "Організувати побут, розподілити обов’язки, зібрати пліт і перетворити виживання на захопливу історію.",
+    "Розшифрувати старовинні карти, знайти спільну мову з корінними жителями та прокласти шлях додому.",
+    "Впорядкувати всі ресурси, створити зрозумілі інструкції для виживання та естетично облаштувати табір."]}
+];
+
+/* ==========================================================
+   ЛОГІКА
+   ========================================================== */
+const $ = id => document.getElementById(id);
+const panel = $("panel");
+let step = 0;              // індекс поточного питання
+let answers = [];          // обрані літери
+
+function setProgress(done){
+  const total = QUESTIONS.length, pct = Math.round(done / total * 100);
+  $("barFill").style.width = pct + "%";
+  $("barWrap").setAttribute("aria-valuenow", pct);
+  $("progressPct").textContent = done ? pct + "%" : "";
+  $("progressText").textContent = done >= total ? "Тест завершено"
+    : done ? "Питання " + (done + 1) + " із " + total : "Готовий почати?";
+}
+
+function renderStart(){
+  setProgress(0);
+  panel.innerHTML =
+    '<div class="start swap">' +
+    '<h2>Дізнайся, яка медіапрофесія підходить саме тобі</h2>' +
+    '<p>Обирай один варіант відповіді (А, Б, В, Г або Д), який найточніше описує твої інтереси, навички та уявлення про майбутню професію.</p>' +
+    '<p>Наприкінці ми самі підрахуємо результат і покажемо освітню програму, яка тобі найближча.</p>' +
+    '<p class="meta">' + QUESTIONS.length + ' питань, близько 3 хвилин</p>' +
+    '<button class="btn" id="startBtn">Почати тест</button></div>';
+  $("startBtn").onclick = () => { step = 0; answers = []; renderQuestion(); };
+}
+
+function renderQuestion(){
+  const item = QUESTIONS[step];
+  setProgress(step);
+  panel.innerHTML =
+    '<div class="swap">' +
+    '<div class="q-count">Питання ' + (step + 1) + ' із ' + QUESTIONS.length + '</div>' +
+    '<h2 class="q-title" id="qTitle">' + item.q + '</h2>' +
+    '<ul class="options" role="radiogroup" aria-labelledby="qTitle">' +
+    item.a.map((text, i) =>
+      '<li><button class="opt' + (answers[step] === LETTERS[i] ? ' picked' : '') +
+      '" role="radio" aria-checked="' + (answers[step] === LETTERS[i]) + '" data-l="' + LETTERS[i] + '">' +
+      '<span class="key">' + LETTERS[i] + '</span><span class="txt">' + text + '</span></button></li>'
+    ).join("") +
+    '</ul>' +
+    '<div class="q-nav">' +
+    (step > 0 ? '<button class="link" id="backBtn">Назад</button>' : '<span></span>') +
+    '</div></div>';
+  panel.querySelectorAll(".opt").forEach(b => b.onclick = () => choose(b.dataset.l));
+  if (step > 0) $("backBtn").onclick = () => { step--; renderQuestion(); };
+}
+
+function choose(letter){
+  answers[step] = letter;
+  panel.querySelectorAll(".opt").forEach(b => b.classList.toggle("picked", b.dataset.l === letter));
+  setTimeout(() => {          // коротка пауза, щоб побачити вибір
+    if (step < QUESTIONS.length - 1){ step++; renderQuestion(); }
+    else renderResult();
+  }, 260);
+}
+
+function calcScores(){
+  const s = {}; Object.keys(RESULTS).forEach(t => s[t] = 0);
+  answers.forEach(l => s[TAGS[l]]++);
+  return s;
+}
+
+function renderResult(){
+  setProgress(QUESTIONS.length);
+  const scores = calcScores();
+  const order = Object.keys(RESULTS);                       // порядок = пріоритет
+  const max = Math.max(...Object.values(scores));
+  const winners = order.filter(t => scores[t] === max);     // 1 — перемога, 2+ — нічия
+
+  let lead, title, cards;
+  if (winners.length === 1){
+    const r = RESULTS[winners[0]];
+    lead = "Твоя освітня програма";
+    title = r.name;
+    cards = '<div class="card main-card"><h3>Твій профіль</h3><p>' + r.profile + '</p></div>' +
+            '<div class="card"><h3>Що на тебе чекає</h3><p>' + r.awaits + '</p></div>';
+  } else {
+    const names = winners.map(t => RESULTS[t].name);
+    lead = "У тебе нічия";
+    title = "Тобі однаково добре підходять " +
+      (names.length === 2 ? names.join(" та ") : names.slice(0,-1).join(", ") + " та " + names.slice(-1));
+    cards = winners.map((t, i) => {
+      const r = RESULTS[t];
+      return '<div class="card' + (i === 0 ? ' main-card' : '') + '"><div class="prog">' + r.name + '</div>' +
+             '<h3>Твій профіль</h3><p>' + r.profile + '</p><h3 style="margin-top:12px">Що на тебе чекає</h3><p>' + r.awaits + '</p></div>';
+    }).join("");
+  }
+
+  const bars = order.map(t =>
+    '<div class="score' + (winners.includes(t) ? ' win' : '') + '"><span>' + RESULTS[t].name +
+    '</span><span class="track"><i data-w="' + (scores[t] / QUESTIONS.length * 100) + '"></i></span><b>' + scores[t] + '</b></div>'
+  ).join("");
+
+  panel.innerHTML =
+    '<div class="result swap"><div class="lead">' + lead + '</div><h2>' + title + '</h2>' + cards +
+    '<div class="scores"><h3>Твої бали за напрямами</h3>' + bars + '</div>' +
+    '<div class="actions"><button class="btn" id="againBtn">Пройти ще раз</button>' +
+    '<button class="btn ghost" id="editBtn">Змінити відповіді</button></div></div>';
+
+  requestAnimationFrame(() => requestAnimationFrame(() =>
+    panel.querySelectorAll(".track i").forEach(i => i.style.width = i.dataset.w + "%")));
+  $("againBtn").onclick = renderStart;
+  $("editBtn").onclick = () => { step = QUESTIONS.length - 1; renderQuestion(); };
+}
+
+renderStart();
+</script>
+</body>
+</html>
